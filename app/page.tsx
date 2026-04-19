@@ -70,16 +70,25 @@ export default function VibeTrackDigitalTwin() {
     if (mapContainerRef.current && typeof window !== 'undefined') {
       import('mapbox-gl').then((mapboxglModule) => {
         const mapboxgl = mapboxglModule.default || mapboxglModule;
-        mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || '';
-        map = new mapboxgl.Map({
-          container: mapContainerRef.current as HTMLDivElement,
-          style: 'mapbox://styles/mapbox/dark-v11',
-          center: [-74.006, 40.7128], // Default to generic stadium coordinates
-          zoom: 16,
-          pitch: 60,
-          bearing: -20,
-          antialias: true
-        });
+        const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || '';
+        mapboxgl.accessToken = token;
+        
+        try {
+          // Only attempt Mapbox if we have a seemingly real token
+          if (token && !token.includes('placeholder')) {
+            map = new mapboxgl.Map({
+              container: mapContainerRef.current as HTMLDivElement,
+              style: 'mapbox://styles/mapbox/dark-v11',
+              center: [-74.006, 40.7128], // Default to generic stadium coordinates
+              zoom: 15,
+              pitch: 60, // 3D perspective
+              bearing: -17.6,
+              antialias: true
+            });
+          }
+        } catch (error) {
+          console.warn("Mapbox failed to load (likely missing/invalid token). Rendering 3D twin on black background.");
+        }
       }).catch(console.error);
     }
 
