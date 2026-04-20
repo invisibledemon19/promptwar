@@ -59,6 +59,8 @@ const HeatSphere = ({ node }: { node: VibeNode }) => {
   );
 };
 
+import { ZoomContainer } from './components/ZoomContainer';
+
 export default function VibeTrackDigitalTwin() {
   const [nodes, setNodes] = useState<VibeNode[]>([]);
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -132,44 +134,46 @@ export default function VibeTrackDigitalTwin() {
   }, []);
 
   return (
-    <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
-      {/* 2D Spatial Map Layer */}
-      <div ref={mapContainerRef} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0 }} />
-      
-      {/* 3D Digital Twin Layer */}
-      <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1 }}>
-        <Canvas camera={{ position: [0, 20, 30], fov: 60 }}>
-          <ambientLight intensity={0.5} />
-          <pointLight position={[10, 10, 10]} intensity={1} />
-          <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
-          
-          <group>
-            {nodes.map(node => (
-              <HeatSphere key={node.node_id} node={node} />
-            ))}
-          </group>
-          <OrbitControls makeDefault enableZoom={true} enablePan={true} maxPolarAngle={Math.PI / 2} />
-        </Canvas>
-      </div>
-      
-      {/* UI Overlay Dashboard */}
-      <div style={{ position: 'absolute', top: 20, left: 20, zIndex: 2, background: 'rgba(0,0,0,0.7)', padding: '20px', borderRadius: '12px', color: 'white', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.1)' }}>
-        <h1 style={{ margin: 0, fontSize: '24px', fontWeight: 'bold', background: '-webkit-linear-gradient(45deg, #8A2BE2, #00FFCC)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>VibeTrack Engine</h1>
-        <p style={{ margin: '10px 0 0', opacity: 0.8 }}>Live Spatial & Emotion Telemetry</p>
+    <ZoomContainer>
+      <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
+        {/* 2D Spatial Map Layer */}
+        <div ref={mapContainerRef} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0 }} />
         
-        <div style={{ marginTop: '20px', display: 'flex', gap: '10px', alignItems: 'center' }}>
-          <div style={{ width: '15px', height: '15px', borderRadius: '50%', background: '#8A2BE2', boxShadow: '0 0 10px #8A2BE2' }}></div>
-          <span style={{ fontSize: '14px' }}>High Energy (Cheering)</span>
+        {/* 3D Digital Twin Layer */}
+        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1 }}>
+          <Canvas camera={{ position: [0, 20, 30], fov: 60 }}>
+            <ambientLight intensity={0.5} />
+            <pointLight position={[10, 10, 10]} intensity={1} />
+            <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
+            
+            <group>
+              {nodes.map(node => (
+                <HeatSphere key={node.node_id} node={node} />
+              ))}
+            </group>
+            <OrbitControls makeDefault enableZoom={true} enablePan={true} maxPolarAngle={Math.PI / 2} />
+          </Canvas>
         </div>
-        <div style={{ marginTop: '10px', display: 'flex', gap: '10px', alignItems: 'center' }}>
-          <div style={{ width: '15px', height: '15px', borderRadius: '50%', background: '#FF4500', boxShadow: '0 0 10px #FF4500' }}></div>
-          <span style={{ fontSize: '14px' }}>Frustration Spike (Queue/Bottleneck)</span>
-        </div>
-        <div style={{ marginTop: '10px', display: 'flex', gap: '10px', alignItems: 'center' }}>
-          <div style={{ width: '15px', height: '15px', borderRadius: '50%', background: '#00FFCC', boxShadow: '0 0 10px #00FFCC' }}></div>
-          <span style={{ fontSize: '14px' }}>Neutral / Fluid Movement</span>
+        
+        {/* UI Overlay Dashboard */}
+        <div style={{ position: 'absolute', top: 20, left: 20, zIndex: 2, background: 'rgba(0,0,0,0.7)', padding: '20px', borderRadius: '12px', color: 'white', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.1)' }}>
+          <h1 style={{ margin: 0, fontSize: '24px', fontWeight: 'bold', background: '-webkit-linear-gradient(45deg, #8A2BE2, #00FFCC)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>VibeTrack Engine</h1>
+          <p style={{ margin: '10px 0 0', opacity: 0.8 }}>Live Spatial & Emotion Telemetry</p>
+          
+          <div style={{ marginTop: '20px', display: 'flex', gap: '10px', alignItems: 'center' }}>
+            <div style={{ width: '15px', height: '15px', borderRadius: '50%', background: '#8A2BE2', boxShadow: '0 0 10px #8A2BE2' }}></div>
+            <span style={{ fontSize: '14px' }}>High Energy (Cheering)</span>
+          </div>
+          <div style={{ marginTop: '10px', display: 'flex', gap: '10px', alignItems: 'center' }}>
+            <div style={{ width: '15px', height: '15px', borderRadius: '50%', background: '#FF4500', boxShadow: '0 0 10px #FF4500' }}></div>
+            <span style={{ fontSize: '14px' }}>Frustration Spike (Queue/Bottleneck)</span>
+          </div>
+          <div style={{ marginTop: '10px', display: 'flex', gap: '10px', alignItems: 'center' }}>
+            <div style={{ width: '15px', height: '15px', borderRadius: '50%', background: '#00FFCC', boxShadow: '0 0 10px #00FFCC' }}></div>
+            <span style={{ fontSize: '14px' }}>Neutral / Fluid Movement</span>
+          </div>
         </div>
       </div>
-    </div>
+    </ZoomContainer>
   );
 }
